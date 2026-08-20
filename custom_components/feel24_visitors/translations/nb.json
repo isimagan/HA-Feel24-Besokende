@@ -1,0 +1,22 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Feel24 Visitors er allerede konfigurert."
+    },
+    "error": {
+      "unknown_gym": "Velg et treningssenter fra forslagene, eller la feltet stå tomt."
+    },
+    "step": {
+      "user": {
+        "data": {
+          "gym": "Treningssenter"
+        },
+        "data_description": {
+          "gym": "Valgfritt. Begynn å skrive for å filtrere listen over Feel24-sentre."
+        },
+        "description": "Velg Feel24-senteret du vil hente besøksdata for.",
+        "title": "Velg treningssenter"
+      }
+    }
+  }
+}

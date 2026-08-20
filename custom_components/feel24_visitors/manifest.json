@@ -1,7 +1,11 @@
 {
   "codeowners": ["@isimagan"],
+  "config_flow": true,
+  "dependencies": ["http"],
   "documentation": "https://github.com/isimagan/HA-Feel24-Visitors#readme",
   "domain": "feel24_visitors",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/isimagan/HA-Feel24-Visitors/issues",
   "name": "Feel24 Visitors",
   "version": "0.1.0"

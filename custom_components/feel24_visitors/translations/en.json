@@ -1,0 +1,22 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Feel24 Visitors is already configured."
+    },
+    "error": {
+      "unknown_gym": "Choose a gym from the suggestions or leave the field empty."
+    },
+    "step": {
+      "user": {
+        "data": {
+          "gym": "Gym"
+        },
+        "data_description": {
+          "gym": "Optional. Start typing to filter the list of Feel24 gyms."
+        },
+        "description": "Choose the Feel24 gym whose visitor data you want to use.",
+        "title": "Choose gym"
+      }
+    }
+  }
+}
