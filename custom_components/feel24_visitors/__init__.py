@@ -8,11 +8,13 @@ from homeassistant.components.http import StaticPathConfig
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.typing import ConfigType
 
-from .const import STATIC_URL_PATH
+from .const import DOMAIN, STATIC_URL_PATH
 from .coordinator import Feel24VisitorsCoordinator
 
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 PLATFORMS = (Platform.SELECT, Platform.SENSOR)
 STATIC_DIR = Path(__file__).parent / "static"
 
