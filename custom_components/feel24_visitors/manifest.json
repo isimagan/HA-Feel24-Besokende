@@ -1,0 +1,8 @@
+{
+  "codeowners": ["@isimagan"],
+  "documentation": "https://github.com/isimagan/HA-Feel24-Visitors#readme",
+  "domain": "feel24_visitors",
+  "issue_tracker": "https://github.com/isimagan/HA-Feel24-Visitors/issues",
+  "name": "Feel24 Visitors",
+  "version": "0.1.0"
+}
