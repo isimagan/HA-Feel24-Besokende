@@ -6,11 +6,6 @@
 
 Home Assistant custom integration for visitor data from Feel24.
 
-> [!IMPORTANT]
-> The integration is under development. The configuration wizard and entities
-> are implemented, but the visitor-data source is not connected yet. Until it
-> is connected, `sensor.feel24_visitors` will be unavailable.
-
 ## Installation with HACS
 
 HACS can only install from a public GitHub repository. When the integration is
@@ -39,6 +34,7 @@ verified and connected.
 
 Integration files belong in `custom_components/feel24_visitors/`. Keep the
 integration version in `manifest.json` in sync with GitHub release tags.
+Retrieving live visitor counts is the next development milestone.
 
 ## License
 
