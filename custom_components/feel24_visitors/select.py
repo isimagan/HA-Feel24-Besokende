@@ -5,9 +5,10 @@ from __future__ import annotations
 from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .const import CHOSEN_GYM_ICON
+from .const import CHOSEN_GYM_ICON, DOMAIN, MANUFACTURER, MODEL
 from .coordinator import Feel24VisitorsCoordinator
 from .gyms import GYMS
 
@@ -48,3 +49,13 @@ class Feel24ChosenGymSelect(SelectEntity):
             raise ValueError(f"Unknown Feel24 gym: {option}")
         await self.coordinator.async_set_gym(option)
         self.async_write_ha_state()
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device shared with the visitor sensor."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self.coordinator.entry.entry_id)},
+            manufacturer=MANUFACTURER,
+            model=MODEL,
+            name=self.coordinator.gym or self.coordinator.entry.title,
+        )

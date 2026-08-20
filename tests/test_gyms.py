@@ -2,6 +2,7 @@
 
 import importlib.util
 from pathlib import Path
+import sys
 import unittest
 
 GYMS_PATH = (
@@ -13,9 +14,12 @@ GYMS_PATH = (
 SPEC = importlib.util.spec_from_file_location("feel24_gyms", GYMS_PATH)
 assert SPEC and SPEC.loader
 GYMS_MODULE = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = GYMS_MODULE
 SPEC.loader.exec_module(GYMS_MODULE)
 
+GYM_DATA = GYMS_MODULE.GYM_DATA
 GYMS = GYMS_MODULE.GYMS
+get_gym = GYMS_MODULE.get_gym
 resolve_gym = GYMS_MODULE.resolve_gym
 select_effective_gym = GYMS_MODULE.select_effective_gym
 
@@ -26,6 +30,21 @@ class GymValidationTests(unittest.TestCase):
     def test_gym_list_is_unique(self) -> None:
         """The configured gym list must not contain duplicates."""
         self.assertEqual(len(GYMS), len(set(GYMS)))
+
+    def test_every_gym_has_an_id(self) -> None:
+        """Every suggestion must carry its current iBooking ID."""
+        self.assertEqual(len(GYM_DATA), 116)
+        self.assertEqual(len(GYMS), len(GYM_DATA))
+        self.assertTrue(all(gym.id > 0 for gym in GYM_DATA))
+
+    def test_known_gym_ids(self) -> None:
+        """IDs from the official center data resolve with their gyms."""
+        billingstad = get_gym("Feel24 Billingstad")
+        voyenenga = get_gym("Feel24 Vøyenenga")
+        self.assertIsNotNone(billingstad)
+        self.assertIsNotNone(voyenenga)
+        self.assertEqual(billingstad.id, 2713)
+        self.assertEqual(voyenenga.id, 2743)
 
     def test_resolve_exact_gym(self) -> None:
         """An exact gym name resolves to itself."""

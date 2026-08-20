@@ -13,8 +13,14 @@ from homeassistant.helpers.selector import (
     SelectSelectorMode,
 )
 
-from .const import CONF_GYM, DEFAULT_NAME, DOMAIN
-from .gyms import GYMS, resolve_gym
+from .const import (
+    CONF_GYM,
+    CONF_GYM_ID,
+    DEFAULT_NAME,
+    DOMAIN,
+    DYNAMIC_UNIQUE_ID,
+)
+from .gyms import GYMS, get_gym, gym_unique_id, resolve_gym
 
 CONFIG_SCHEMA = vol.Schema(
     {
@@ -33,7 +39,7 @@ CONFIG_SCHEMA = vol.Schema(
 class Feel24VisitorsConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Feel24 Visitors."""
 
-    VERSION = 1
+    VERSION = 2
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -47,12 +53,18 @@ class Feel24VisitorsConfigFlow(ConfigFlow, domain=DOMAIN):
             if gym is None:
                 errors[CONF_GYM] = "unknown_gym"
             else:
-                await self.async_set_unique_id(DOMAIN)
+                gym_data = get_gym(gym)
+                await self.async_set_unique_id(
+                    gym_unique_id(gym_data) if gym_data else DYNAMIC_UNIQUE_ID
+                )
                 self._abort_if_unique_id_configured()
 
                 return self.async_create_entry(
                     title=gym or DEFAULT_NAME,
-                    data={CONF_GYM: gym},
+                    data={
+                        CONF_GYM: gym,
+                        CONF_GYM_ID: gym_data.id if gym_data else None,
+                    },
                 )
 
         return self.async_show_form(

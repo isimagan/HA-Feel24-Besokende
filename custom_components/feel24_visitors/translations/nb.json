@@ -1,7 +1,7 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Feel24 Visitors er allerede konfigurert."
+      "already_configured": "Dette Feel24-senteret er allerede konfigurert."
     },
     "error": {
       "unknown_gym": "Velg et treningssenter fra forslagene, eller la feltet stå tomt."

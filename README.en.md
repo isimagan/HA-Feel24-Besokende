@@ -27,6 +27,10 @@ In the configuration wizard, start typing the name of a Feel24 gym to filter
 the list of suggestions. Select a suggestion or leave the optional field
 empty. An unknown gym name produces an error and cannot be saved.
 
+Run the wizard more than once to add multiple gyms. Each selected gym gets its
+own config entry, device page, and visitor sensor. The same gym cannot be added
+twice.
+
 When the field is left empty, `select.feel24_chosen_gym` is created so the
 active gym can be changed later in Home Assistant.
 
@@ -34,14 +38,20 @@ active gym can be changed later in Home Assistant.
 
 | Entity | Icon | Description |
 | --- | --- | --- |
-| `sensor.feel24_visitors` | `mdi:shoe-sneaker` | Number of visitors at the selected gym. The entity uses the green Feel24 symbol as its entity picture and the unit `besøkende`. |
+| `sensor.feel24_visitors` | `mdi:shoe-sneaker` | Number of visitors at the selected gym. The entity uses the green Feel24 symbol as its entity picture and the unit `besøkende`. The `gym` and `gym_id` attributes expose the gym name and iBooking ID. |
 | `select.feel24_chosen_gym` | `mdi:weight-lifter` | Selects the gym that controls the visitor sensor. It is only created when the setup wizard is completed without a selected gym. |
+
+Home Assistant may add a suffix to an entity ID when multiple visitor sensors
+have the same name. Each sensor appears on its own device page in the
+integration.
 
 ## Development
 
 Integration files are located in `custom_components/feel24_visitors/`. The
-next development milestone is connecting the sensor to a verified source of
-live visitor data.
+Feel24 app fetches visitor counts from an authenticated Membro/iBooking
+endpoint. The matching login flow has not been implemented yet, so the visitor
+sensor remains unavailable until it is. The integration does not publish
+invented values.
 
 Keep the version in `manifest.json` synchronized with GitHub releases.
 

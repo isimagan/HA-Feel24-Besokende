@@ -1,7 +1,7 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Feel24 Visitors is already configured."
+      "already_configured": "This Feel24 gym is already configured."
     },
     "error": {
       "unknown_gym": "Choose a gym from the suggestions or leave the field empty."

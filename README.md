@@ -28,6 +28,10 @@ for å filtrere listen med forslag. Du kan velge et forslag eller la det
 valgfrie feltet stå tomt. Et ukjent senternavn gir en feilmelding og kan ikke
 lagres.
 
+Du kan kjøre veilederen flere ganger for å legge til flere sentre. Hvert valgt
+senter får sin egen oppføring, enhetsside og besøkssensor. Det samme senteret
+kan ikke legges til to ganger.
+
 Hvis feltet står tomt, opprettes `select.feel24_chosen_gym`, slik at aktivt
 treningssenter kan endres senere i Home Assistant.
 
@@ -35,14 +39,18 @@ treningssenter kan endres senere i Home Assistant.
 
 | Enhet | Ikon | Beskrivelse |
 | --- | --- | --- |
-| `sensor.feel24_visitors` | `mdi:shoe-sneaker` | Antall besøkende på valgt treningssenter. Enheten bruker det grønne Feel24-symbolet som entity picture og måleenheten `besøkende`. |
+| `sensor.feel24_visitors` | `mdi:shoe-sneaker` | Antall besøkende på valgt treningssenter. Enheten bruker det grønne Feel24-symbolet som entity picture og måleenheten `besøkende`. Attributtene `gym` og `gym_id` viser senterets navn og iBooking-ID. |
 | `select.feel24_chosen_gym` | `mdi:weight-lifter` | Velger hvilket treningssenter som påvirker besøkssensoren. Opprettes bare når veiviseren fullføres uten et valgt senter. |
+
+Home Assistant kan legge til et suffiks i entity-ID-en når flere besøkssensorer
+har samme navn. Alle sensorene vises på hver sin enhetsside under integrasjonen.
 
 ## Utvikling
 
-Integrasjonsfilene ligger i `custom_components/feel24_visitors/`. Neste
-utviklingssteg er å koble sensoren til en verifisert kilde for sanntidsdata om
-besøkende.
+Integrasjonsfilene ligger i `custom_components/feel24_visitors/`. Feel24-appen
+henter besøkstall fra et autentisert Membro/iBooking-endepunkt. Integrasjonen
+mangler foreløpig den tilhørende innloggingsflyten, og besøkssensoren er derfor
+utilgjengelig til denne er implementert. Det publiseres ikke oppdiktede tall.
 
 Hold versjonen i `manifest.json` synkronisert med GitHub-utgivelser.
 

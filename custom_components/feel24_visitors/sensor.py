@@ -5,12 +5,17 @@ from __future__ import annotations
 from homeassistant.components.sensor import SensorEntity, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
     ATTR_GYM,
+    ATTR_GYM_ID,
+    DOMAIN,
     ENTITY_PICTURE_URL,
+    MANUFACTURER,
+    MODEL,
     VISITORS_ICON,
     VISITORS_UNIT,
 )
@@ -59,6 +64,19 @@ class Feel24VisitorsSensor(
         return self.coordinator.data.visitor_count
 
     @property
-    def extra_state_attributes(self) -> dict[str, str]:
+    def extra_state_attributes(self) -> dict[str, str | int | None]:
         """Return the gym represented by the visitor count."""
-        return {ATTR_GYM: self.coordinator.data.gym}
+        return {
+            ATTR_GYM: self.coordinator.data.gym,
+            ATTR_GYM_ID: self.coordinator.data.gym_id,
+        }
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the device that provides an overview page for this gym."""
+        return DeviceInfo(
+            identifiers={(DOMAIN, self.coordinator.entry.entry_id)},
+            manufacturer=MANUFACTURER,
+            model=MODEL,
+            name=self.coordinator.gym or self.coordinator.entry.title,
+        )

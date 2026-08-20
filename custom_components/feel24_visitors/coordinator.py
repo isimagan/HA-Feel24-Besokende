@@ -9,8 +9,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .const import CONF_GYM, DEFAULT_NAME
-from .gyms import select_effective_gym
+from .const import CONF_GYM, CONF_GYM_ID, DEFAULT_NAME
+from .gyms import get_gym, select_effective_gym
 
 UPDATE_INTERVAL = timedelta(minutes=5)
 
@@ -20,6 +20,7 @@ class Feel24VisitorsData:
     """Current Feel24 visitor data."""
 
     gym: str
+    gym_id: int | None
     visitor_count: int | None
 
 
@@ -50,20 +51,38 @@ class Feel24VisitorsCoordinator(DataUpdateCoordinator[Feel24VisitorsData]):
         """Return whether the gym was fixed in the config flow."""
         return bool(self._fixed_gym)
 
+    @property
+    def gym_id(self) -> int | None:
+        """Return the iBooking ID for the active gym."""
+        gym = get_gym(self.gym)
+        return gym.id if gym else None
+
     async def _async_update_data(self) -> Feel24VisitorsData:
         """Fetch visitor data for the selected gym.
 
-        The app confirms that visitor statistics exist, but no anonymous public
-        endpoint has been verified yet. Keep the value unknown instead of
-        publishing an invented count.
+        The verified Membro endpoint requires a member token. Keep the value
+        unknown until the integration has a supported authentication flow
+        instead of publishing an invented count.
         """
-        return Feel24VisitorsData(gym=self.gym, visitor_count=None)
+        return Feel24VisitorsData(
+            gym=self.gym,
+            gym_id=self.gym_id,
+            visitor_count=None,
+        )
 
     async def async_set_gym(self, gym: str) -> None:
         """Persist a user-selected gym and refresh the visitor sensor."""
-        self._chosen_gym = gym
+        gym_data = get_gym(gym)
+        if gym_data is None:
+            raise ValueError(f"Unknown Feel24 gym: {gym}")
+
+        self._chosen_gym = gym_data.name
         self.hass.config_entries.async_update_entry(
             self.entry,
-            options={**self.entry.options, CONF_GYM: gym},
+            options={
+                **self.entry.options,
+                CONF_GYM: gym_data.name,
+                CONF_GYM_ID: gym_data.id,
+            },
         )
         await self.async_refresh()
