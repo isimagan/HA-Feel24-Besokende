@@ -1,39 +1,51 @@
-![Feel24 logo](https://raw.githubusercontent.com/isimagan/HA-Feel24-Visitors/master/brand/icon.png)
+![Feel24-logo](https://raw.githubusercontent.com/isimagan/HA-Feel24-Visitors/master/brand/logo.png)
+
+**Norsk** | [English](https://github.com/isimagan/HA-Feel24-Visitors/blob/master/README.en.md)
 
 # HA Feel24 Visitors
 
-Home Assistant custom integration for visitor data from Feel24.
+En tilpasset Home Assistant-integrasjon for besøksdata fra Feel24.
 
-## Installation with HACS
+Dette er et uoffisielt fellesskapsprosjekt og er ikke utviklet eller støttet av
+Feel24.
 
-HACS can only install from a public GitHub repository. When the integration is
-ready for testers:
+## Installasjon med HACS
 
-1. Make this repository public.
-2. In HACS, open **Custom repositories**.
-3. Add `https://github.com/isimagan/HA-Feel24-Visitors` as an **Integration**.
-4. Download **HA Feel24 Visitors** and restart Home Assistant.
-5. Open **Settings → Devices & services → Add integration** and select
-   **Feel24 Visitors**.
+Repoet er ikke listet i HACS-katalogen. Det kan installeres ved å legge det til
+som et tilpasset pakkelager:
 
-## Configuration
+1. Åpne HACS og velg **Custom repositories / Tilpassede pakkelagre**.
+2. Legg til `https://github.com/isimagan/HA-Feel24-Visitors`.
+3. Velg **Integration** som kategori.
+4. Last ned **HA Feel24 Visitors** og start Home Assistant på nytt.
+5. Åpne **Innstillinger → Enheter og tjenester → Legg til integrasjon** og
+   velg **Feel24 Visitors**.
 
-The setup wizard lets you search for a Feel24 gym by typing in the gym field.
-Choose one of the suggestions, or leave the optional field empty. An unknown
-gym name cannot be submitted. Leaving the field empty creates a
-`select.feel24_chosen_gym` entity so the active gym can be changed later.
+## Konfigurasjon
 
-The integration creates `sensor.feel24_visitors` with the unit `besøkende`.
-The entity uses the Feel24 logo as its entity picture. Its state will contain
-the current visitor count once the Feel24 visitor-data endpoint has been
-verified and connected.
+I konfigurasjonsveilederen kan du begynne å skrive navnet på et Feel24-senter
+for å filtrere listen med forslag. Du kan velge et forslag eller la det
+valgfrie feltet stå tomt. Et ukjent senternavn gir en feilmelding og kan ikke
+lagres.
 
-## Development
+Hvis feltet står tomt, opprettes `select.feel24_chosen_gym`, slik at aktivt
+treningssenter kan endres senere i Home Assistant.
 
-Integration files belong in `custom_components/feel24_visitors/`. Keep the
-integration version in `manifest.json` in sync with GitHub release tags.
-Retrieving live visitor counts is the next development milestone.
+## Enheter
 
-## License
+| Enhet | Ikon | Beskrivelse |
+| --- | --- | --- |
+| `sensor.feel24_visitors` | `mdi:shoe-sneaker` | Antall besøkende på valgt treningssenter. Enheten bruker det grønne Feel24-symbolet som entity picture og måleenheten `besøkende`. |
+| `select.feel24_chosen_gym` | `mdi:weight-lifter` | Velger hvilket treningssenter som påvirker besøkssensoren. Opprettes bare når veiviseren fullføres uten et valgt senter. |
+
+## Utvikling
+
+Integrasjonsfilene ligger i `custom_components/feel24_visitors/`. Neste
+utviklingssteg er å koble sensoren til en verifisert kilde for sanntidsdata om
+besøkende.
+
+Hold versjonen i `manifest.json` synkronisert med GitHub-utgivelser.
+
+## Lisens
 
 MIT
