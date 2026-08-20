@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="brand/icon.png" alt="Feel24 logo" width="320">
-</p>
+![Feel24 logo](https://raw.githubusercontent.com/isimagan/HA-Feel24-Visitors/master/brand/icon.png)
 
 # HA Feel24 Visitors
 
