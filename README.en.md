@@ -27,9 +27,19 @@ In the configuration wizard, start typing the name of a Feel24 gym to filter
 the list of suggestions. Select a suggestion or leave the optional field
 empty. An unknown gym name produces an error and cannot be saved.
 
+The first setup asks for the phone number registered with Feel24. The wizard
+requests a one-time SMS code from Feel24/iBooking and asks for that code in the
+next step. The integration stores the resulting member token and uses it to
+fetch the real visitor count. The one-time code is not stored.
+
+After upgrading from version 0.2, Home Assistant requests reauthentication for
+the existing entry. Complete the phone and code steps once to activate the
+visitor sensor.
+
 Run the wizard more than once to add multiple gyms. Each selected gym gets its
 own config entry, device page, and visitor sensor. The same gym cannot be added
-twice.
+twice. New gym entries reuse the existing login, so another SMS code is
+normally not needed.
 
 When the field is left empty, `select.feel24_chosen_gym` is created so the
 active gym can be changed later in Home Assistant.
@@ -48,10 +58,9 @@ integration.
 ## Development
 
 Integration files are located in `custom_components/feel24_visitors/`. The
-Feel24 app fetches visitor counts from an authenticated Membro/iBooking
-endpoint. The matching login flow has not been implemented yet, so the visitor
-sensor remains unavailable until it is. The integration does not publish
-invented values.
+integration uses the same authenticated Membro/iBooking flow and `presence`
+endpoint as the Feel24 app. Home Assistant requests reauthentication if the
+stored token is invalid or expires.
 
 Keep the version in `manifest.json` synchronized with GitHub releases.
 

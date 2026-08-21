@@ -5,11 +5,28 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import timedelta
 
+from aiohttp import ClientError
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.update_coordinator import (
+    DataUpdateCoordinator,
+    UpdateFailed,
+)
 
-from .const import CONF_GYM, CONF_GYM_ID, DEFAULT_NAME
+from .api import (
+    Feel24Api,
+    Feel24ApiError,
+    Feel24AuthenticationError,
+)
+from .const import (
+    CONF_ACCESS_TOKEN,
+    CONF_GYM,
+    CONF_GYM_ID,
+    CONF_USER_ID,
+    DEFAULT_NAME,
+)
 from .gyms import get_gym, select_effective_gym
 
 UPDATE_INTERVAL = timedelta(minutes=5)
@@ -32,6 +49,7 @@ class Feel24VisitorsCoordinator(DataUpdateCoordinator[Feel24VisitorsData]):
         self.entry = entry
         self._fixed_gym = entry.data.get(CONF_GYM, "")
         self._chosen_gym = entry.options.get(CONF_GYM, "")
+        self._api = Feel24Api(async_get_clientsession(hass))
 
         super().__init__(
             hass,
@@ -39,6 +57,7 @@ class Feel24VisitorsCoordinator(DataUpdateCoordinator[Feel24VisitorsData]):
             name=DEFAULT_NAME,
             update_interval=UPDATE_INTERVAL,
             config_entry=entry,
+            always_update=False,
         )
 
     @property
@@ -58,16 +77,31 @@ class Feel24VisitorsCoordinator(DataUpdateCoordinator[Feel24VisitorsData]):
         return gym.id if gym else None
 
     async def _async_update_data(self) -> Feel24VisitorsData:
-        """Fetch visitor data for the selected gym.
+        """Fetch visitor data for the selected gym."""
+        token = self.entry.data.get(CONF_ACCESS_TOKEN)
+        user_id = self.entry.data.get(CONF_USER_ID)
+        if not isinstance(token, str) or not isinstance(user_id, int):
+            raise ConfigEntryAuthFailed("Feel24 login is required")
 
-        The verified Membro endpoint requires a member token. Keep the value
-        unknown until the integration has a supported authentication flow
-        instead of publishing an invented count.
-        """
+        visitor_count: int | None = None
+        if self.gym_id is not None:
+            try:
+                visitor_count = await self._api.async_get_visitor_count(
+                    self.gym_id, token, user_id
+                )
+            except Feel24AuthenticationError as err:
+                raise ConfigEntryAuthFailed(
+                    "Feel24 credentials were rejected"
+                ) from err
+            except (Feel24ApiError, ClientError, TimeoutError) as err:
+                raise UpdateFailed(
+                    "Error communicating with the Feel24 API"
+                ) from err
+
         return Feel24VisitorsData(
             gym=self.gym,
             gym_id=self.gym_id,
-            visitor_count=None,
+            visitor_count=visitor_count,
         )
 
     async def async_set_gym(self, gym: str) -> None:

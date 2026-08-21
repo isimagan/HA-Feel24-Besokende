@@ -50,7 +50,7 @@ async def async_migrate_entry(
     hass: HomeAssistant, entry: ConfigEntry
 ) -> bool:
     """Migrate older entries to per-gym IDs and unique IDs."""
-    if entry.version > 2:
+    if entry.version > 3:
         return False
 
     if entry.version == 1:
@@ -86,8 +86,11 @@ async def async_migrate_entry(
                 if fixed_gym
                 else DYNAMIC_UNIQUE_ID
             ),
-            version=2,
+            version=3,
         )
+
+    elif entry.version == 2:
+        hass.config_entries.async_update_entry(entry, version=3)
 
     return True
 

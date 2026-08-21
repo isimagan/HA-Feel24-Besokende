@@ -7,6 +7,10 @@ ENTITY_PICTURE_URL = f"{STATIC_URL_PATH}/feel24-logo.png"
 
 CONF_GYM = "gym"
 CONF_GYM_ID = "gym_id"
+CONF_ACCESS_TOKEN = "access_token"
+CONF_USER_ID = "user_id"
+CONF_PHONE = "phone"
+CONF_CODE = "code"
 
 DEFAULT_NAME = "Feel24 Visitors"
 DYNAMIC_UNIQUE_ID = "dynamic"

@@ -1,9 +1,14 @@
 {
   "config": {
     "abort": {
-      "already_configured": "This Feel24 gym is already configured."
+      "already_configured": "This Feel24 gym is already configured.",
+      "reauth_successful": "Authentication was successful."
     },
     "error": {
+      "cannot_connect": "Could not connect to Feel24. Try again later.",
+      "invalid_code": "The code was not accepted. Check the code and try again.",
+      "invalid_phone": "Enter the phone number registered with Feel24, including the country code.",
+      "rate_limited": "Too many login attempts. Wait a while before trying again.",
       "unknown_gym": "Choose a gym from the suggestions or leave the field empty."
     },
     "step": {
@@ -16,6 +21,23 @@
         },
         "description": "Choose the Feel24 gym whose visitor data you want to use.",
         "title": "Choose gym"
+      },
+      "phone": {
+        "data": {
+          "phone": "Phone number"
+        },
+        "data_description": {
+          "phone": "Use the number registered with Feel24. Norwegian eight-digit numbers automatically get +47."
+        },
+        "description": "Continue to request a one-time login code by SMS from Feel24/iBooking.",
+        "title": "Log in to Feel24"
+      },
+      "code": {
+        "data": {
+          "code": "One-time code"
+        },
+        "description": "Enter the code sent to {phone}.",
+        "title": "Enter login code"
       }
     }
   }

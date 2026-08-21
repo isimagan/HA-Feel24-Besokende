@@ -28,9 +28,19 @@ for å filtrere listen med forslag. Du kan velge et forslag eller la det
 valgfrie feltet stå tomt. Et ukjent senternavn gir en feilmelding og kan ikke
 lagres.
 
+Første gang logger du inn med telefonnummeret som er registrert hos Feel24.
+Veiviseren ber Feel24/iBooking sende en engangskode på SMS, og koden skrives
+inn i neste steg. Integrasjonen lagrer medlemstokenet og bruker det til å hente
+det faktiske besøkstallet. Engangskoden lagres ikke.
+
+Ved oppgradering fra versjon 0.2 ber Home Assistant om ny autentisering på den
+eksisterende oppføringen. Fullfør telefon- og kodesteget én gang for å aktivere
+besøkssensoren.
+
 Du kan kjøre veilederen flere ganger for å legge til flere sentre. Hvert valgt
 senter får sin egen oppføring, enhetsside og besøkssensor. Det samme senteret
-kan ikke legges til to ganger.
+kan ikke legges til to ganger. Nye senteroppføringer gjenbruker den eksisterende
+innloggingen, slik at du normalt ikke trenger en ny SMS-kode.
 
 Hvis feltet står tomt, opprettes `select.feel24_chosen_gym`, slik at aktivt
 treningssenter kan endres senere i Home Assistant.
@@ -47,10 +57,10 @@ har samme navn. Alle sensorene vises på hver sin enhetsside under integrasjonen
 
 ## Utvikling
 
-Integrasjonsfilene ligger i `custom_components/feel24_visitors/`. Feel24-appen
-henter besøkstall fra et autentisert Membro/iBooking-endepunkt. Integrasjonen
-mangler foreløpig den tilhørende innloggingsflyten, og besøkssensoren er derfor
-utilgjengelig til denne er implementert. Det publiseres ikke oppdiktede tall.
+Integrasjonsfilene ligger i `custom_components/feel24_visitors/`. Integrasjonen
+bruker samme autentiserte Membro/iBooking-flyt og `presence`-endepunkt som
+Feel24-appen. Ved ugyldig eller utløpt token ber Home Assistant om ny
+autentisering.
 
 Hold versjonen i `manifest.json` synkronisert med GitHub-utgivelser.
 
