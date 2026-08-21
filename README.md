@@ -52,6 +52,10 @@ treningssenter kan endres senere i Home Assistant.
 | `sensor.feel24_visitors` | `mdi:shoe-sneaker` | Antall besøkende på valgt treningssenter. Enheten bruker det grønne Feel24-symbolet som entity picture og måleenheten `besøkende`. Attributtene `gym` og `gym_id` viser senterets navn og iBooking-ID. |
 | `select.feel24_chosen_gym` | `mdi:weight-lifter` | Velger hvilket treningssenter som påvirker besøkssensoren. Opprettes bare når veiviseren fullføres uten et valgt senter. |
 
+Verdien `0` er en gyldig og tilgjengelig måling og betyr at ingen besøkende er
+registrert på senteret akkurat nå. Sensoren blir bare `utilgjengelig` når
+integrasjonen ikke kan hente en bekreftet verdi.
+
 Home Assistant kan legge til et suffiks i entity-ID-en når flere besøkssensorer
 har samme navn. Alle sensorene vises på hver sin enhetsside under integrasjonen.
 

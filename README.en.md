@@ -51,6 +51,10 @@ active gym can be changed later in Home Assistant.
 | `sensor.feel24_visitors` | `mdi:shoe-sneaker` | Number of visitors at the selected gym. The entity uses the green Feel24 symbol as its entity picture and the unit `besøkende`. The `gym` and `gym_id` attributes expose the gym name and iBooking ID. |
 | `select.feel24_chosen_gym` | `mdi:weight-lifter` | Selects the gym that controls the visitor sensor. It is only created when the setup wizard is completed without a selected gym. |
 
+The value `0` is a valid, available measurement and means that no visitors are
+currently registered at the gym. The sensor only becomes `unavailable` when
+the integration cannot retrieve a confirmed value.
+
 Home Assistant may add a suffix to an entity ID when multiple visitor sensors
 have the same name. Each sensor appears on its own device page in the
 integration.

@@ -139,6 +139,17 @@ class Feel24ApiTests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertEqual(request["headers"]["X-iBooking-User-Id"], "42")
 
+    async def test_zero_visitors_is_valid(self) -> None:
+        """A zero visitor count must not be treated as missing data."""
+        session = FakeSession(FakeResponse(200, {"current_sum": 0}))
+
+        count = await Feel24Api(session).async_get_visitor_count(
+            2713, "member-token", 42
+        )
+
+        self.assertEqual(count, 0)
+        self.assertIsNotNone(count)
+
     async def test_presence_authentication_error(self) -> None:
         """Rejected stored credentials trigger Home Assistant reauth."""
         session = FakeSession(
