@@ -48,4 +48,4 @@ class Feel24VisitorsCoordinator(DataUpdateCoordinator[int]):
 
             return parse_visitor_count(html)
         except (TimeoutError, aiohttp.ClientError, UnicodeError, ValueError) as err:
-            raise UpdateFailed(f"Unable to fetch Feel24 visitor count: {err}") from err
+            raise UpdateFailed(f"Kunne ikke hente besøkstallet fra Feel24: {err}") from err
