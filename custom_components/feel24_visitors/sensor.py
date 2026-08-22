@@ -13,6 +13,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
     ATTR_CENTER_ID,
+    ATTR_LOGO_PATH,
     ATTR_PLACE,
     BASE_VISITORS_URL,
     CONF_CENTER_NAME,
@@ -20,6 +21,7 @@ from .const import (
     DOMAIN,
     ENTITY_PICTURE_URL,
     ICON,
+    LOGO_PATH_URL,
 )
 from .coordinator import Feel24VisitorsCoordinator
 
@@ -59,6 +61,7 @@ class Feel24VisitorsSensor(
         self._attr_entity_picture = ENTITY_PICTURE_URL
         self._attr_extra_state_attributes = {
             ATTR_CENTER_ID: location_id,
+            ATTR_LOGO_PATH: LOGO_PATH_URL,
             ATTR_PLACE: place,
         }
         self._attr_device_info = DeviceInfo(

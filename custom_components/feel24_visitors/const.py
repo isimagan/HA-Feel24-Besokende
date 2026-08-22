@@ -5,6 +5,7 @@ from datetime import timedelta
 DOMAIN = "feel24_visitors"
 
 ATTR_CENTER_ID = "center_id"
+ATTR_LOGO_PATH = "logo_path"
 ATTR_PLACE = "sted"
 CONF_CENTER_NAME = "center_name"
 CONF_LOCATION_ID = "location_id"
@@ -12,6 +13,7 @@ CONF_LOCATION_ID = "location_id"
 BASE_VISITORS_URL = "https://feel24tromso.ibooking.no/"
 ENTITY_PICTURE_URL = "/api/feel24_visitors/icon.png"
 ICON = "mdi:shoe-sneaker"
+LOGO_PATH_URL = "/api/feel24_visitors/logo.png"
 UPDATE_INTERVAL = timedelta(minutes=5)
 
 # Feel24 locations exposed by the public iBooking studio list.

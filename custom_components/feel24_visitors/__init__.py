@@ -16,6 +16,7 @@ from .const import (
     CONF_LOCATION_ID,
     DOMAIN,
     ENTITY_PICTURE_URL,
+    LOGO_PATH_URL,
 )
 from .coordinator import Feel24VisitorsCoordinator
 
@@ -24,9 +25,14 @@ PLATFORMS = [Platform.SENSOR]
 
 async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
     """Set up the Feel24 Visitors integration."""
-    icon_path = Path(__file__).parent / "brand" / "icon.png"
+    brand_path = Path(__file__).parent / "brand"
     await hass.http.async_register_static_paths(
-        [StaticPathConfig(ENTITY_PICTURE_URL, str(icon_path), True)]
+        [
+            StaticPathConfig(
+                ENTITY_PICTURE_URL, str(brand_path / "icon.png"), True
+            ),
+            StaticPathConfig(LOGO_PATH_URL, str(brand_path / "logo.png"), True),
+        ]
     )
     return True
 

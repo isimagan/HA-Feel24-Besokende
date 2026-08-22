@@ -39,7 +39,8 @@ Sensoren:
 - viser antall registrerte treningsgjester akkurat nå
 - bruker enheten `besøkende`
 - bruker ikonet `mdi:shoe-sneaker` og Feel24-bildet
-- har attributtene `center_id` og `sted` (`Billingstad` i dette eksemplet)
+- har attributtene `center_id`, `sted` (`Billingstad` i dette eksemplet) og
+  `logo_path` (`/api/feel24_visitors/logo.png`)
 - oppdateres hvert femte minutt
 
 Hvert senter registreres også som en enhet i Home Assistant. Det gir senteret
