@@ -1,0 +1,19 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Choose a Feel24 gym",
+        "description": "Start typing to find your gym, then select it from the list.",
+        "data": {
+          "location_id": "Gym"
+        }
+      }
+    },
+    "error": {
+      "invalid_center": "Select a valid Feel24 gym from the list."
+    },
+    "abort": {
+      "already_configured": "This gym is already configured."
+    }
+  }
+}

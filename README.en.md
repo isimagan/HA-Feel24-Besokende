@@ -4,11 +4,11 @@
 
 # HA Feel24 Visitors
 
-This repository is prepared as a custom HACS repository for a future Home
-Assistant integration for Feel24.
+An unofficial Home Assistant integration for Feel24.
 
-The integration currently contains no configuration flow, entities, or data
-retrieval.
+The integration includes a configuration flow where you can search for and
+select a Feel24 gym. Only gyms from the built-in list can be selected. Sensors
+and visitor-count retrieval will be added in a later version.
 
 ## Add to HACS using the link
 
@@ -19,12 +19,27 @@ The repository is not listed in the HACS catalogue. Add it manually:
 3. Select **Integration** as the category.
 4. Select **Add**.
 
+## Configuration
+
+1. Install the integration through HACS and restart Home Assistant.
+2. Open **Settings → Devices & services**.
+3. Select **Add integration** and search for **Feel24 Visitors**.
+4. Start typing the name of your gym, then select it from the list.
+
+The location ID is stored automatically. There are no other settings yet.
+
 Only users who have the GitHub link and add it as a custom repository will
 find the repository in HACS. It has not been submitted to the default HACS
 repository list.
 
-This is an unofficial community project and is not developed or supported by
-Feel24.
+## Status
+
+- Configuration flow with searchable gym selection
+- Norwegian and English interface
+- No sensors yet
+
+This is an unofficial community project and is not developed, endorsed, or
+supported by Feel24.
 
 ## License
 

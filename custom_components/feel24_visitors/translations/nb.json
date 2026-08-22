@@ -1,0 +1,19 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Velg et Feel24-senter",
+        "description": "Begynn å skrive for å finne senteret ditt, og velg det deretter fra listen.",
+        "data": {
+          "location_id": "Treningssenter"
+        }
+      }
+    },
+    "error": {
+      "invalid_center": "Velg et gyldig Feel24-senter fra listen."
+    },
+    "abort": {
+      "already_configured": "Dette senteret er allerede konfigurert."
+    }
+  }
+}

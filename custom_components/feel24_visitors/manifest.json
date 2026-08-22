@@ -2,8 +2,9 @@
   "domain": "feel24_visitors",
   "name": "Feel24 Visitors",
   "codeowners": ["@isimagan"],
+  "config_flow": true,
   "documentation": "https://github.com/isimagan/HA-Feel24-Visitors#readme",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/isimagan/HA-Feel24-Visitors/issues",
-  "version": "0.1.0"
+  "version": "0.2.0"
 }
