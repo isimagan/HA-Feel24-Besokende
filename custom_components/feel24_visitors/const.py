@@ -5,6 +5,7 @@ from datetime import timedelta
 DOMAIN = "feel24_visitors"
 
 ATTR_CENTER_ID = "center_id"
+ATTR_PLACE = "sted"
 CONF_CENTER_NAME = "center_name"
 CONF_LOCATION_ID = "location_id"
 

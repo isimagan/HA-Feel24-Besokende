@@ -31,7 +31,7 @@ Senter-ID-en lagres automatisk. Det finnes ingen andre innstillinger ennå.
 For et senter som **Feel24 Billingstad** opprettes normalt:
 
 ```text
-sensor.feel24_billingstad_visitors
+sensor.feel24_billingstad_besokende
 ```
 
 Sensoren:
@@ -39,7 +39,7 @@ Sensoren:
 - viser antall registrerte treningsgjester akkurat nå
 - bruker enheten `besøkende`
 - bruker ikonet `mdi:shoe-sneaker` og Feel24-bildet
-- har attributtet `center_id`
+- har attributtene `center_id` og `sted` (`Billingstad` i dette eksemplet)
 - oppdateres hvert femte minutt
 
 Hvert senter registreres også som en enhet i Home Assistant. Det gir senteret

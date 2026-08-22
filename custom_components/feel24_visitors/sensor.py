@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+
 from homeassistant.components.sensor import SensorEntity, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -11,6 +13,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
     ATTR_CENTER_ID,
+    ATTR_PLACE,
     BASE_VISITORS_URL,
     CONF_CENTER_NAME,
     CONF_LOCATION_ID,
@@ -37,7 +40,7 @@ class Feel24VisitorsSensor(
 
     _attr_has_entity_name = True
     _attr_icon = ICON
-    _attr_name = "Visitors"
+    _attr_name = "Besøkende"
     _attr_native_unit_of_measurement = "besøkende"
     _attr_state_class = SensorStateClass.MEASUREMENT
 
@@ -50,9 +53,14 @@ class Feel24VisitorsSensor(
         location_id = str(entry.data[CONF_LOCATION_ID])
         center_name = str(entry.data[CONF_CENTER_NAME])
 
-        self._attr_unique_id = f"{location_id}_visitors"
+        place = re.sub(r"^Feel\s*24\s+", "", center_name, flags=re.IGNORECASE)
+
+        self._attr_unique_id = f"{location_id}_besokende"
         self._attr_entity_picture = ENTITY_PICTURE_URL
-        self._attr_extra_state_attributes = {ATTR_CENTER_ID: location_id}
+        self._attr_extra_state_attributes = {
+            ATTR_CENTER_ID: location_id,
+            ATTR_PLACE: place,
+        }
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, location_id)},
             name=center_name,

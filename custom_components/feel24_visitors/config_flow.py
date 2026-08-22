@@ -37,7 +37,7 @@ CENTER_SELECTOR = SelectSelector(
 class Feel24VisitorsConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Feel24 Visitors."""
 
-    VERSION = 2
+    VERSION = 3
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
