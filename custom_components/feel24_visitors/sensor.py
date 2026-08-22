@@ -37,9 +37,9 @@ class Feel24VisitorsSensor(
 
     _attr_has_entity_name = True
     _attr_icon = ICON
-    _attr_native_unit_of_measurement = "visitors"
+    _attr_name = "Visitors"
+    _attr_native_unit_of_measurement = "besøkende"
     _attr_state_class = SensorStateClass.MEASUREMENT
-    _attr_translation_key = "visitors"
 
     def __init__(
         self, entry: ConfigEntry, coordinator: Feel24VisitorsCoordinator

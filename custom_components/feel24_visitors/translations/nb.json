@@ -15,12 +15,5 @@
     "abort": {
       "already_configured": "Dette senteret er allerede konfigurert."
     }
-  },
-  "entity": {
-    "sensor": {
-      "visitors": {
-        "name": "Visitors"
-      }
-    }
   }
 }

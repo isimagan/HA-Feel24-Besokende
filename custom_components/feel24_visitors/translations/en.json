@@ -15,12 +15,5 @@
     "abort": {
       "already_configured": "This gym is already configured."
     }
-  },
-  "entity": {
-    "sensor": {
-      "visitors": {
-        "name": "Visitors"
-      }
-    }
   }
 }

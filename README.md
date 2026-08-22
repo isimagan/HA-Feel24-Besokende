@@ -1,7 +1,5 @@
 ![Feel24-logo](https://raw.githubusercontent.com/isimagan/HA-Feel24-Visitors/master/brand/logo.png)
 
-**Norsk** | [English](https://github.com/isimagan/HA-Feel24-Visitors/blob/master/README.en.md)
-
 # HA Feel24 Visitors
 
 En uoffisiell Home Assistant-integrasjon for Feel24.
@@ -39,7 +37,7 @@ sensor.feel24_billingstad_visitors
 Sensoren:
 
 - viser antall registrerte treningsgjester akkurat nå
-- bruker enheten `visitors`
+- bruker enheten `besøkende`
 - bruker ikonet `mdi:shoe-sneaker` og Feel24-bildet
 - har attributtet `center_id`
 - oppdateres hvert femte minutt
@@ -54,7 +52,7 @@ standardliste.
 ## Status
 
 - Konfigurasjonsveiviser med søkbart sentervalg
-- Norsk og engelsk grensesnitt
+- Norsk grensesnitt og dokumentasjon
 - Sensor for antall besøkende
 - Egen enhetsside for hvert konfigurert senter
 
