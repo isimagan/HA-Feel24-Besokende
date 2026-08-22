@@ -1,6 +1,6 @@
-![Feel24-logo](https://raw.githubusercontent.com/isimagan/HA-Feel24-Visitors/master/brand/logo.png)
+![Feel24-logo](https://raw.githubusercontent.com/isimagan/HA-Feel24-Besokende/master/brand/logo.png)
 
-# HA Feel24 Visitors
+# HA Feel24 Besøkende
 
 En uoffisiell Home Assistant-integrasjon for Feel24.
 
@@ -13,7 +13,7 @@ oppretter deretter en sensor som viser hvor mange som trener på senteret nå.
 Repoet er ikke listet i HACS-katalogen. Det må legges til manuelt:
 
 1. Åpne HACS og velg **Tilpassede pakkelagre / Custom repositories**.
-2. Legg til `https://github.com/isimagan/HA-Feel24-Visitors`.
+2. Legg til `https://github.com/isimagan/HA-Feel24-Besokende`.
 3. Velg **Integration** som kategori.
 4. Velg **Legg til**.
 
@@ -21,7 +21,7 @@ Repoet er ikke listet i HACS-katalogen. Det må legges til manuelt:
 
 1. Installer integrasjonen gjennom HACS og start Home Assistant på nytt.
 2. Åpne **Innstillinger → Enheter og tjenester**.
-3. Velg **Legg til integrasjon** og søk etter **Feel24 Visitors**.
+3. Velg **Legg til integrasjon** og søk etter **Feel24 Besøkende**.
 4. Begynn å skrive navnet på senteret ditt, og velg senteret fra listen.
 
 Senter-ID-en lagres automatisk. Det finnes ingen andre innstillinger ennå.
