@@ -14,7 +14,13 @@ from homeassistant.helpers.selector import (
     SelectSelectorMode,
 )
 
-from .const import CENTERS, CENTERS_BY_ID, CONF_LOCATION_ID, DOMAIN
+from .const import (
+    CENTERS,
+    CENTERS_BY_ID,
+    CONF_CENTER_NAME,
+    CONF_LOCATION_ID,
+    DOMAIN,
+)
 
 CENTER_SELECTOR = SelectSelector(
     SelectSelectorConfig(
@@ -31,7 +37,7 @@ CENTER_SELECTOR = SelectSelector(
 class Feel24VisitorsConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Feel24 Visitors."""
 
-    VERSION = 1
+    VERSION = 2
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -51,7 +57,10 @@ class Feel24VisitorsConfigFlow(ConfigFlow, domain=DOMAIN):
 
                 return self.async_create_entry(
                     title=center_name,
-                    data={CONF_LOCATION_ID: location_id},
+                    data={
+                        CONF_CENTER_NAME: center_name,
+                        CONF_LOCATION_ID: location_id,
+                    },
                 )
 
         return self.async_show_form(
