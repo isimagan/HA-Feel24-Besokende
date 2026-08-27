@@ -42,6 +42,8 @@ Sensoren:
 - har attributtene `center_id`, `sted` (`Billingstad` i dette eksemplet) og
   `logo_path` (`/api/feel24_visitors/logo.png`)
 - oppdateres hvert femte minutt
+- har en egen **Mer info**-visning med Feel24-logo, besøkstall, sted og
+  tidspunktet sensoren sist ble oppdatert
 
 Hvert senter registreres også som en enhet i Home Assistant. Det gir senteret
 en egen enhetsside med sensoren, i stedet for bare en løs entitet i listen.
@@ -56,6 +58,7 @@ standardliste.
 - Norsk grensesnitt og dokumentasjon
 - Sensor for antall besøkende
 - Egen enhetsside for hvert konfigurert senter
+- Egen Mer info-visning for sensoren
 
 Dette er et uoffisielt fellesskapsprosjekt og er ikke utviklet, godkjent eller
 støttet av Feel24.

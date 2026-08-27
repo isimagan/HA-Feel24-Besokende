@@ -3,6 +3,7 @@
 from pathlib import Path
 from typing import Any
 
+from homeassistant.components.frontend import add_extra_js_url
 from homeassistant.components.http import StaticPathConfig
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -16,6 +17,8 @@ from .const import (
     CONF_LOCATION_ID,
     DOMAIN,
     ENTITY_PICTURE_URL,
+    FRONTEND_MODULE_URL,
+    FRONTEND_STATIC_URL,
     LOGO_PATH_URL,
 )
 from .coordinator import Feel24VisitorsCoordinator
@@ -26,14 +29,21 @@ PLATFORMS = [Platform.SENSOR]
 async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
     """Set up the Feel24 Visitors integration."""
     brand_path = Path(__file__).parent / "brand"
+    frontend_path = Path(__file__).parent / "frontend"
     await hass.http.async_register_static_paths(
         [
             StaticPathConfig(
                 ENTITY_PICTURE_URL, str(brand_path / "icon.png"), True
             ),
             StaticPathConfig(LOGO_PATH_URL, str(brand_path / "logo.png"), True),
+            StaticPathConfig(
+                FRONTEND_STATIC_URL,
+                str(frontend_path / "feel24-more-info.js"),
+                True,
+            ),
         ]
     )
+    add_extra_js_url(hass, FRONTEND_MODULE_URL)
     return True
 
 
