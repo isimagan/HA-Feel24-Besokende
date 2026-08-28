@@ -1,4 +1,7 @@
-![Feel24-logo](https://raw.githubusercontent.com/isimagan/HA-Feel24-Besokende/master/brand/logo.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/isimagan/HA-Feel24-Besokende/master/brand/logo.png">
+  <img alt="Feel24-logo" src="https://raw.githubusercontent.com/isimagan/HA-Feel24-Besokende/master/brand/logo-light.svg">
+</picture>
 
 # HA Feel24 Besøkende
 

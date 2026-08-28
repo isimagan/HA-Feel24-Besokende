@@ -17,9 +17,22 @@ class Feel24MoreInfo extends HTMLElement {
           padding: 54px 32px 60px;
         }
 
+        .logo-surface {
+          display: grid;
+          place-items: center;
+          width: min(78%, 300px);
+          padding: 14px 18px;
+          border-radius: 14px;
+          background: rgb(0 0 0 / 6%);
+        }
+
+        :host([dark-mode]) .logo-surface {
+          background: transparent;
+        }
+
         .logo {
           display: block;
-          width: min(78%, 300px);
+          width: 100%;
           height: auto;
         }
 
@@ -56,7 +69,9 @@ class Feel24MoreInfo extends HTMLElement {
         }
       </style>
       <div class="content">
-        <img class="logo" alt="Feel24" />
+        <div class="logo-surface">
+          <img class="logo" alt="Feel24" />
+        </div>
         <div class="copy" aria-live="polite">
           <p class="reading"></p>
           <p class="updated"></p>
@@ -71,6 +86,7 @@ class Feel24MoreInfo extends HTMLElement {
 
   set hass(value) {
     this._hass = value;
+    this.toggleAttribute("dark-mode", Boolean(value?.themes?.darkMode));
     this._update();
   }
 

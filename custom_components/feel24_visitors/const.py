@@ -13,7 +13,7 @@ CONF_LOCATION_ID = "location_id"
 
 BASE_VISITORS_URL = "https://feel24tromso.ibooking.no/"
 ENTITY_PICTURE_URL = "/api/feel24_visitors/icon.png"
-FRONTEND_MODULE_URL = "/api/feel24_visitors/feel24-more-info.js?v=0.5.0"
+FRONTEND_MODULE_URL = "/api/feel24_visitors/feel24-more-info.js?v=0.5.1"
 FRONTEND_STATIC_URL = "/api/feel24_visitors/feel24-more-info.js"
 ICON = "mdi:shoe-sneaker"
 LOGO_PATH_URL = "/api/feel24_visitors/logo.png"
