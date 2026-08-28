@@ -15,5 +15,35 @@
     "abort": {
       "already_configured": "Dette senteret er allerede konfigurert."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Besøksvarsel",
+        "description": "Velg når du vil varsles om lavt besøkstall. Varslingen må også slås på med Varsel-switchen.",
+        "data": {
+          "notification_threshold": "Antall besøkende",
+          "notification_time_mode": "Varslingstid",
+          "notification_target": "Mottaker"
+        },
+        "data_description": {
+          "notification_threshold": "Varsle når besøkstallet går fra over denne grensen til lik eller under grensen.",
+          "notification_time_mode": "Varsle hele døgnet eller bare innenfor et valgt tidsrom.",
+          "notification_target": "Mobilen eller notify-entiteten som skal motta pushvarselet."
+        }
+      },
+      "schedule": {
+        "title": "Velg varslingstid",
+        "description": "Tidsrommet kan gå over midnatt, for eksempel 22:00–02:00.",
+        "data": {
+          "notification_start": "Fra klokken",
+          "notification_end": "Til klokken"
+        }
+      }
+    },
+    "error": {
+      "invalid_recipient": "Velg en gyldig notify-entitet.",
+      "same_notification_time": "Start- og sluttid kan ikke være like. Velg Hele døgnet dersom du vil varsles hele tiden."
+    }
   }
 }

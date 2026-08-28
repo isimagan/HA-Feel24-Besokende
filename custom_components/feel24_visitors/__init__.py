@@ -23,7 +23,7 @@ from .const import (
 )
 from .coordinator import Feel24VisitorsCoordinator
 
-PLATFORMS = [Platform.SENSOR]
+PLATFORMS = [Platform.SENSOR, Platform.SWITCH]
 
 
 async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
