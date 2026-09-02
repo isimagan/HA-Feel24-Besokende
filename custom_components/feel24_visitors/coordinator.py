@@ -17,6 +17,26 @@ from .parser import parse_visitor_count
 
 _LOGGER = logging.getLogger(__name__)
 
+_MAX_RESPONSE_BYTES = 256 * 1024
+_READ_CHUNK_BYTES = 16 * 1024
+
+
+async def _read_bounded_response(response: aiohttp.ClientResponse) -> str:
+    """Read a visitor page without allowing an unbounded response body."""
+    if (
+        response.content_length is not None
+        and response.content_length > _MAX_RESPONSE_BYTES
+    ):
+        raise ValueError("Feel24 response is too large")
+
+    body = bytearray()
+    async for chunk in response.content.iter_chunked(_READ_CHUNK_BYTES):
+        body.extend(chunk)
+        if len(body) > _MAX_RESPONSE_BYTES:
+            raise ValueError("Feel24 response is too large")
+
+    return body.decode("iso-8859-1")
+
 
 class Feel24VisitorsCoordinator(DataUpdateCoordinator[int]):
     """Fetch the current visitor count for one Feel24 center."""
@@ -44,7 +64,7 @@ class Feel24VisitorsCoordinator(DataUpdateCoordinator[int]):
             async with asyncio.timeout(10):
                 async with self._session.get(self.visitors_url) as response:
                     response.raise_for_status()
-                    html = await response.text(encoding="iso-8859-1")
+                    html = await _read_bounded_response(response)
 
             return parse_visitor_count(html)
         except (TimeoutError, aiohttp.ClientError, UnicodeError, ValueError) as err:
