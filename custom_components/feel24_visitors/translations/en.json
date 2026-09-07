@@ -28,8 +28,8 @@
         },
         "data_description": {
           "notification_threshold": "Notify when the visitor count moves from above this threshold to at or below it.",
-          "notification_time_mode": "Notify all day or only within a selected time window.",
-          "notification_target": "The mobile device or notify entity that receives the push notification."
+          "notification_time_mode": "Notify all day or only between selected times. If you select a time window, you choose the times on the next page.",
+          "notification_target": "Select one or more mobile devices or notify entities that receive the push notification."
         }
       },
       "schedule": {
@@ -42,7 +42,7 @@
       }
     },
     "error": {
-      "invalid_recipient": "Select a valid notify entity.",
+      "invalid_recipient": "Select at least one valid notify entity.",
       "same_notification_time": "The start and end time cannot be the same. Select All day to receive notifications at all times."
     }
   }
