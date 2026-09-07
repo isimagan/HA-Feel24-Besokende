@@ -297,12 +297,14 @@ class Feel24MoreInfo extends HTMLElement {
 
     const isOn = stateObj.state === "on";
     this._notificationToggle.checked = isOn;
-    this._notificationStatus.textContent =
+    const status =
       typeof this._hass.formatEntityState === "function"
         ? this._hass.formatEntityState(stateObj)
         : isOn
           ? "På"
           : "Av";
+    this._notificationStatus.textContent =
+      `${status} · Trykk for å konfigurere`;
   }
 
   _findNotificationEntity() {
