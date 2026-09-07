@@ -45,6 +45,7 @@ from .notification import (
     crossed_threshold,
     is_within_time_window,
     notification_message,
+    notification_targets,
     numeric_visitor_count,
 )
 
@@ -148,8 +149,7 @@ class Feel24VisitorNotificationSwitch(
     ) -> bool:
         """Return whether all notification requirements are met."""
         options = self._entry.options
-        target = options.get(CONF_NOTIFICATION_TARGET)
-        if not isinstance(target, str) or self._resolve_target(target) is None:
+        if not self._resolve_targets(options.get(CONF_NOTIFICATION_TARGET)):
             return False
 
         threshold = numeric_visitor_count(
@@ -176,10 +176,10 @@ class Feel24VisitorNotificationSwitch(
 
     async def _async_send_notification(self, count: int | float) -> None:
         """Send the threshold notification to the configured notify entity."""
-        target = self._entry.options.get(CONF_NOTIFICATION_TARGET)
-        if not isinstance(target, str) or (
-            resolved_target := self._resolve_target(target)
-        ) is None:
+        resolved_targets = self._resolve_targets(
+            self._entry.options.get(CONF_NOTIFICATION_TARGET)
+        )
+        if not resolved_targets:
             return
 
         try:
@@ -191,17 +191,29 @@ class Feel24VisitorNotificationSwitch(
                     ATTR_MESSAGE: notification_message(count, self._center_name),
                 },
                 blocking=True,
-                target={"entity_id": resolved_target},
+                target={"entity_id": resolved_targets},
             )
         except HomeAssistantError as err:
             _LOGGER.warning(
-                "Kunne ikke sende Feel24-varsel til %s: %s", resolved_target, err
+                "Kunne ikke sende Feel24-varsel til %s: %s",
+                ", ".join(resolved_targets),
+                err,
             )
 
-    def _resolve_target(self, entity_id_or_uuid: str) -> str | None:
-        """Resolve the selected notify entity and reject removed recipients."""
+    def _resolve_targets(self, value: object) -> list[str]:
+        """Resolve selected notify entities and discard removed recipients."""
         entity_registry = er.async_get(self.hass)
-        entity_id = er.async_resolve_entity_id(entity_registry, entity_id_or_uuid)
-        if entity_id is None or not entity_id.startswith(f"{NOTIFY_DOMAIN}."):
-            return None
-        return entity_id if self.hass.states.get(entity_id) is not None else None
+        resolved_targets: list[str] = []
+
+        for entity_id_or_uuid in notification_targets(value):
+            entity_id = er.async_resolve_entity_id(
+                entity_registry, entity_id_or_uuid
+            )
+            if (
+                entity_id is not None
+                and entity_id.startswith(f"{NOTIFY_DOMAIN}.")
+                and self.hass.states.get(entity_id) is not None
+            ):
+                resolved_targets.append(entity_id)
+
+        return resolved_targets
