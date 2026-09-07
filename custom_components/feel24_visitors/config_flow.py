@@ -45,6 +45,7 @@ from .const import (
     NOTIFICATION_TIME_MODE_ALL_DAY,
     NOTIFICATION_TIME_MODE_WINDOW,
 )
+from .notification import notification_targets
 
 CENTER_SELECTOR = SelectSelector(
     SelectSelectorConfig(
@@ -116,8 +117,12 @@ class Feel24VisitorsOptionsFlow(OptionsFlow):
         errors: dict[str, str] = {}
 
         if user_input is not None:
-            target = str(user_input[CONF_NOTIFICATION_TARGET])
-            if not self._is_valid_notify_entity(target):
+            targets = notification_targets(
+                user_input[CONF_NOTIFICATION_TARGET]
+            )
+            if not targets or not all(
+                self._is_valid_notify_entity(target) for target in targets
+            ):
                 errors[CONF_NOTIFICATION_TARGET] = "invalid_recipient"
             else:
                 options = dict(self.config_entry.options)
@@ -129,7 +134,7 @@ class Feel24VisitorsOptionsFlow(OptionsFlow):
                         CONF_NOTIFICATION_TIME_MODE: user_input[
                             CONF_NOTIFICATION_TIME_MODE
                         ],
-                        CONF_NOTIFICATION_TARGET: target,
+                        CONF_NOTIFICATION_TARGET: targets,
                     }
                 )
 
@@ -155,8 +160,10 @@ class Feel24VisitorsOptionsFlow(OptionsFlow):
                 CONF_NOTIFICATION_TIME_MODE, NOTIFICATION_TIME_MODE_ALL_DAY
             ),
         }
-        if target := current.get(CONF_NOTIFICATION_TARGET):
-            suggested_values[CONF_NOTIFICATION_TARGET] = target
+        if targets := notification_targets(
+            current.get(CONF_NOTIFICATION_TARGET)
+        ):
+            suggested_values[CONF_NOTIFICATION_TARGET] = targets
         if user_input is not None:
             suggested_values.update(user_input)
 
@@ -189,7 +196,7 @@ class Feel24VisitorsOptionsFlow(OptionsFlow):
                     )
                 ),
                 vol.Required(CONF_NOTIFICATION_TARGET): EntitySelector(
-                    EntitySelectorConfig(domain=Platform.NOTIFY)
+                    EntitySelectorConfig(domain=Platform.NOTIFY, multiple=True)
                 ),
             }
         )
