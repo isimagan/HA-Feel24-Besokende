@@ -84,6 +84,27 @@ class Feel24MoreInfo extends HTMLElement {
     this._updated = this.shadowRoot.querySelector(".updated");
   }
 
+  connectedCallback() {
+    this._setDefaultSectionsHidden(true);
+  }
+
+  disconnectedCallback() {
+    this._setDefaultSectionsHidden(false);
+  }
+
+  _setDefaultSectionsHidden(hidden) {
+    const moreInfoContent = this.getRootNode()?.host;
+    const moreInfoInfo = moreInfoContent?.getRootNode()?.host;
+    const defaultContent = moreInfoInfo?.shadowRoot?.querySelector(".content");
+
+    for (const selector of ["state-card-content", "ha-more-info-history"]) {
+      const element = defaultContent?.querySelector(selector);
+      if (element) {
+        element.hidden = hidden;
+      }
+    }
+  }
+
   set hass(value) {
     this._hass = value;
     this.toggleAttribute("dark-mode", Boolean(value?.themes?.darkMode));
