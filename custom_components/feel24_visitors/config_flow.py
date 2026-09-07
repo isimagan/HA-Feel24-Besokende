@@ -189,7 +189,7 @@ class Feel24VisitorsOptionsFlow(OptionsFlow):
                             ),
                             SelectOptionDict(
                                 value=NOTIFICATION_TIME_MODE_WINDOW,
-                                label="Mellom to klokkeslett",
+                                label="Mellom tidspunkter",
                             ),
                         ],
                         mode=SelectSelectorMode.DROPDOWN,
