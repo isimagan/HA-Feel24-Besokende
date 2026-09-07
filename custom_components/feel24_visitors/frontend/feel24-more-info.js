@@ -350,28 +350,33 @@ class Feel24MoreInfo extends HTMLElement {
       return;
     }
 
-    this.dispatchEvent(
-      new CustomEvent("close-dialog", { bubbles: true, composed: true })
-    );
+    let navigated = false;
+    const navigateToConfig = () => {
+      if (navigated) {
+        return;
+      }
+      navigated = true;
+      window.removeEventListener("dialog-closed", navigateToConfig);
 
-    window.setTimeout(() => {
       const currentPath =
         window.location.pathname + window.location.search + window.location.hash;
       const path =
         "/config/integrations/dashboard#config_entry=" +
         encodeURIComponent(configEntryId);
 
-      window.history.pushState(
-        { ...(window.history.state ?? {}), from: currentPath },
-        "",
-        path
-      );
+      window.history.pushState({ from: currentPath }, "", path);
       window.dispatchEvent(
         new CustomEvent("location-changed", {
           detail: { replace: false },
         })
       );
-    });
+    };
+
+    window.addEventListener("dialog-closed", navigateToConfig, { once: true });
+    this.dispatchEvent(
+      new CustomEvent("close-dialog", { bubbles: true, composed: true })
+    );
+    window.setTimeout(navigateToConfig, 500);
   }
 
   _strong(value) {
