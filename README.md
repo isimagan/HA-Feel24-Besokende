@@ -48,8 +48,9 @@ Sensoren:
 - har attributtene `center_id`, `sted` (`Billingstad` i dette eksemplet) og
   `logo_path` (`/api/feel24_visitors/logo.png`)
 - oppdateres hvert femte minutt
-- har en egen **Mer info**-visning med Feel24-logo, besøkstall, sted og
-  tidspunktet sensoren sist ble oppdatert
+- har en egen **Mer info**-visning med Feel24-logo, besøkstall, sted,
+  oppdateringstid og en bryter for varsling; trykk på varslingsraden for å gå
+  til integrasjonens konfigurasjon
 
 Hvert senter registreres også som en enhet i Home Assistant. Det gir senteret
 en egen enhetsside med sensoren, i stedet for bare en løs entitet i listen.
@@ -72,7 +73,7 @@ Slik konfigurerer du varslingen:
 
 1. Åpne **Innstillinger → Enheter og tjenester**.
 2. Finn **Feel24 Besøkende**, åpne menyen for senteret og velg **Konfigurer**.
-3. Velg grense, varslingstid og en `notify`-entitet som mottaker.
+3. Velg grense, varslingstid og én eller flere `notify`-entiteter som mottakere.
 4. Slå på senterets **Varsel**-switch når funksjonen skal være aktiv.
 
 Det sendes bare varsel når besøkstallet går fra over grensen til lik eller under
