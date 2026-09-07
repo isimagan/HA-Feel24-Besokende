@@ -62,6 +62,113 @@ class Feel24MoreInfo extends HTMLElement {
           line-height: 1.4;
         }
 
+        .notification {
+          display: flex;
+          align-items: center;
+          width: min(100%, 360px);
+          padding: 10px 4px 10px 16px;
+          box-sizing: border-box;
+          border: 1px solid var(--divider-color);
+          border-radius: 14px;
+          background: var(--card-background-color);
+        }
+
+        .notification[hidden] {
+          display: none;
+        }
+
+        .notification-config {
+          display: grid;
+          flex: 1;
+          gap: 3px;
+          min-width: 0;
+          padding: 4px 12px 4px 0;
+          border: 0;
+          background: none;
+          color: inherit;
+          font: inherit;
+          text-align: left;
+          cursor: pointer;
+        }
+
+        .notification-name {
+          font-size: 16px;
+          font-weight: 500;
+        }
+
+        .notification-status {
+          color: var(--secondary-text-color);
+          font-size: 13px;
+        }
+
+        .notification-toggle {
+          position: relative;
+          display: inline-flex;
+          flex: 0 0 auto;
+          width: 46px;
+          height: 28px;
+          margin: 0 8px;
+        }
+
+        .notification-toggle input {
+          width: 1px;
+          height: 1px;
+          margin: 0;
+          opacity: 0;
+        }
+
+        .notification-slider {
+          position: absolute;
+          inset: 0;
+          border-radius: 14px;
+          background: var(--switch-unchecked-track-color, rgb(120 120 120 / 45%));
+          cursor: pointer;
+          transition: background 160ms ease;
+        }
+
+        .notification-slider::after {
+          content: "";
+          position: absolute;
+          top: 4px;
+          left: 4px;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: var(--switch-unchecked-button-color, white);
+          box-shadow: 0 1px 3px rgb(0 0 0 / 35%);
+          transition: transform 160ms ease;
+        }
+
+        .notification-toggle input:checked + .notification-slider {
+          background: var(--switch-checked-track-color, var(--primary-color));
+        }
+
+        .notification-toggle input:checked + .notification-slider::after {
+          transform: translateX(18px);
+        }
+
+        .notification-toggle input:focus-visible + .notification-slider {
+          outline: 2px solid var(--primary-color);
+          outline-offset: 2px;
+        }
+
+        .notification-toggle input:disabled + .notification-slider {
+          cursor: wait;
+          opacity: 0.55;
+        }
+
+        .visually-hidden {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+
         @media (max-width: 430px) {
           .content {
             padding: 46px 24px 52px;
@@ -76,12 +183,35 @@ class Feel24MoreInfo extends HTMLElement {
           <p class="reading"></p>
           <p class="updated"></p>
         </div>
+        <div class="notification" hidden>
+          <button class="notification-config" type="button">
+            <span class="notification-name">Varsel</span>
+            <span class="notification-status"></span>
+          </button>
+          <label class="notification-toggle">
+            <span class="visually-hidden">Slå varsling av eller på</span>
+            <input type="checkbox" role="switch" />
+            <span class="notification-slider" aria-hidden="true"></span>
+          </label>
+        </div>
       </div>
     `;
 
     this._logo = this.shadowRoot.querySelector(".logo");
     this._reading = this.shadowRoot.querySelector(".reading");
     this._updated = this.shadowRoot.querySelector(".updated");
+    this._notification = this.shadowRoot.querySelector(".notification");
+    this._notificationStatus =
+      this.shadowRoot.querySelector(".notification-status");
+    this._notificationToggle =
+      this.shadowRoot.querySelector(".notification-toggle input");
+
+    this.shadowRoot
+      .querySelector(".notification-config")
+      .addEventListener("click", () => this._openNotificationConfig());
+    this._notificationToggle.addEventListener("change", (event) =>
+      this._toggleNotification(event)
+    );
   }
 
   connectedCallback() {
@@ -118,6 +248,7 @@ class Feel24MoreInfo extends HTMLElement {
 
   set entry(value) {
     this._entry = value;
+    this._update();
   }
 
   set editMode(value) {
@@ -152,6 +283,93 @@ class Feel24MoreInfo extends HTMLElement {
       this._stateObj.last_updated ?? this._stateObj.last_changed
     );
     this._updated.textContent = `Sist oppdatert: ${updated}`;
+    this._updateNotification();
+  }
+
+  _updateNotification() {
+    this._notificationEntityId = this._findNotificationEntity();
+    const stateObj = this._hass?.states?.[this._notificationEntityId];
+
+    this._notification.hidden = !stateObj;
+    if (!stateObj) {
+      return;
+    }
+
+    const isOn = stateObj.state === "on";
+    this._notificationToggle.checked = isOn;
+    this._notificationStatus.textContent =
+      typeof this._hass.formatEntityState === "function"
+        ? this._hass.formatEntityState(stateObj)
+        : isOn
+          ? "På"
+          : "Av";
+  }
+
+  _findNotificationEntity() {
+    const configEntryId = this._entry?.config_entry_id;
+    if (!configEntryId || !this._hass?.entities) {
+      return undefined;
+    }
+
+    return Object.entries(this._hass.entities).find(
+      ([entityId, entry]) =>
+        entityId.startsWith("switch.") &&
+        entry.platform === "feel24_visitors" &&
+        entry.config_entry_id === configEntryId &&
+        entry.unique_id?.endsWith("_varsel")
+    )?.[0];
+  }
+
+  async _toggleNotification(event) {
+    if (!this._notificationEntityId) {
+      return;
+    }
+
+    const toggle = event.currentTarget;
+    toggle.disabled = true;
+
+    try {
+      await this._hass.callService(
+        "switch",
+        toggle.checked ? "turn_on" : "turn_off",
+        {},
+        { entity_id: this._notificationEntityId }
+      );
+    } catch (_error) {
+      toggle.checked = !toggle.checked;
+    } finally {
+      toggle.disabled = false;
+    }
+  }
+
+  _openNotificationConfig() {
+    const configEntryId = this._entry?.config_entry_id;
+    if (!configEntryId) {
+      return;
+    }
+
+    this.dispatchEvent(
+      new CustomEvent("close-dialog", { bubbles: true, composed: true })
+    );
+
+    window.setTimeout(() => {
+      const currentPath =
+        window.location.pathname + window.location.search + window.location.hash;
+      const path =
+        "/config/integrations/dashboard#config_entry=" +
+        encodeURIComponent(configEntryId);
+
+      window.history.pushState(
+        { ...(window.history.state ?? {}), from: currentPath },
+        "",
+        path
+      );
+      window.dispatchEvent(
+        new CustomEvent("location-changed", {
+          detail: { replace: false },
+        })
+      );
+    });
   }
 
   _strong(value) {
