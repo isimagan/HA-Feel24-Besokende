@@ -7,7 +7,6 @@ import math
 from numbers import Real
 
 
-
 def notification_targets(value: object) -> list[str]:
     """Normalize one or more notification targets, preserving their order."""
     if isinstance(value, str):
@@ -20,6 +19,7 @@ def notification_targets(value: object) -> list[str]:
             target for target in value if isinstance(target, str) and target
         )
     )
+
 
 def numeric_visitor_count(value: object) -> int | float | None:
     """Return a valid numeric visitor count, excluding booleans and invalid data."""
