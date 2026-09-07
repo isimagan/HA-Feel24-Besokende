@@ -28,8 +28,8 @@
         },
         "data_description": {
           "notification_threshold": "Varsle når besøkstallet går fra over denne grensen til lik eller under grensen.",
-          "notification_time_mode": "Varsle hele døgnet eller bare innenfor et valgt tidsrom.",
-          "notification_target": "Mobilen eller notify-entiteten som skal motta pushvarselet."
+          "notification_time_mode": "Varsle hele døgnet eller bare mellom tidspunkter. Velger du «Mellom tidspunkter», velger du tidene på neste side.",
+          "notification_target": "Velg én eller flere mobiler eller notify-entiteter som skal motta pushvarselet."
         }
       },
       "schedule": {
@@ -42,7 +42,7 @@
       }
     },
     "error": {
-      "invalid_recipient": "Velg en gyldig notify-entitet.",
+      "invalid_recipient": "Velg minst én gyldig notify-entitet.",
       "same_notification_time": "Start- og sluttid kan ikke være like. Velg Hele døgnet dersom du vil varsles hele tiden."
     }
   }

@@ -51,6 +51,25 @@ class NotificationRulesTest(unittest.TestCase):
         self.assertEqual(NOTIFICATION.numeric_visitor_count(0), 0)
         self.assertEqual(NOTIFICATION.numeric_visitor_count(2), 2)
 
+    def test_notification_targets_support_old_and_new_options(self) -> None:
+        """Single legacy targets and new target lists normalize consistently."""
+        self.assertEqual(
+            NOTIFICATION.notification_targets("notify.mobile_app_phone"),
+            ["notify.mobile_app_phone"],
+        )
+        self.assertEqual(
+            NOTIFICATION.notification_targets(
+                [
+                    "notify.mobile_app_phone",
+                    "notify.mobile_app_watch",
+                    "notify.mobile_app_phone",
+                ]
+            ),
+            ["notify.mobile_app_phone", "notify.mobile_app_watch"],
+        )
+        self.assertEqual(NOTIFICATION.notification_targets(None), [])
+        self.assertEqual(NOTIFICATION.notification_targets([]), [])
+
     def test_notification_uses_actual_count_and_center(self) -> None:
         """The push text contains the actual count after a threshold jump."""
         self.assertEqual(

@@ -7,6 +7,20 @@ import math
 from numbers import Real
 
 
+def notification_targets(value: object) -> list[str]:
+    """Normalize one or more notification targets, preserving their order."""
+    if isinstance(value, str):
+        return [value] if value else []
+    if not isinstance(value, (list, tuple)):
+        return []
+
+    return list(
+        dict.fromkeys(
+            target for target in value if isinstance(target, str) and target
+        )
+    )
+
+
 def numeric_visitor_count(value: object) -> int | float | None:
     """Return a valid numeric visitor count, excluding booleans and invalid data."""
     if isinstance(value, bool) or not isinstance(value, Real):
