@@ -6,15 +6,20 @@ import re
 
 from homeassistant.components.sensor import SensorEntity, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.util import slugify
 
 from .const import (
     ATTR_CENTER_ID,
+    ATTR_CONFIG_ENTRY_ID,
     ATTR_CUSTOM_UI_MORE_INFO,
     ATTR_LOGO_PATH,
+    ATTR_NOTIFICATION_SWITCH,
     ATTR_PLACE,
     BASE_VISITORS_URL,
     CONF_CENTER_NAME,
@@ -59,12 +64,18 @@ class Feel24VisitorsSensor(
 
         place = re.sub(r"^Feel\s*24\s+", "", center_name, flags=re.IGNORECASE)
 
+        self._location_id = location_id
+        self._default_notification_switch_entity_id = (
+            f"switch.{slugify(f'{center_name} Varsel')}"
+        )
         self._attr_unique_id = f"{location_id}_besokende"
         self._attr_entity_picture = ENTITY_PICTURE_URL
         self._attr_extra_state_attributes = {
             ATTR_CENTER_ID: location_id,
+            ATTR_CONFIG_ENTRY_ID: entry.entry_id,
             ATTR_CUSTOM_UI_MORE_INFO: MORE_INFO_ELEMENT,
             ATTR_LOGO_PATH: LOGO_PATH_URL,
+            ATTR_NOTIFICATION_SWITCH: self._default_notification_switch_entity_id,
             ATTR_PLACE: place,
         }
         self._attr_device_info = DeviceInfo(
@@ -75,6 +86,18 @@ class Feel24VisitorsSensor(
                 f"{BASE_VISITORS_URL}?location={location_id}&page=visitors"
             ),
         )
+
+    @property
+    def extra_state_attributes(self) -> dict[str, str]:
+        """Return frontend metadata with the current notification switch ID."""
+        attributes = dict(self._attr_extra_state_attributes)
+        entity_registry = er.async_get(self.hass)
+        switch_entity_id = entity_registry.async_get_entity_id(
+            Platform.SWITCH, DOMAIN, f"{self._location_id}_varsel"
+        )
+        if switch_entity_id is not None:
+            attributes[ATTR_NOTIFICATION_SWITCH] = switch_entity_id
+        return attributes
 
     @property
     def native_value(self) -> int:
