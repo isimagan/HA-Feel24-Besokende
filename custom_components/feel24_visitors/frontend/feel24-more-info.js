@@ -215,24 +215,57 @@ class Feel24MoreInfo extends HTMLElement {
   }
 
   connectedCallback() {
-    this._setDefaultSectionsHidden(true);
+    this._hideAttempts = 0;
+    this._ensureDefaultSectionsHidden();
   }
 
   disconnectedCallback() {
-    this._setDefaultSectionsHidden(false);
+    if (this._hideFrame) {
+      window.cancelAnimationFrame(this._hideFrame);
+    }
+    this._hideStyle?.remove();
+    this._hideStyle = undefined;
   }
 
-  _setDefaultSectionsHidden(hidden) {
-    const moreInfoContent = this.getRootNode()?.host;
-    const moreInfoInfo = moreInfoContent?.getRootNode()?.host;
-    const defaultContent = moreInfoInfo?.shadowRoot?.querySelector(".content");
-
-    for (const selector of ["state-card-content", "ha-more-info-history"]) {
-      const element = defaultContent?.querySelector(selector);
-      if (element) {
-        element.hidden = hidden;
+  _ensureDefaultSectionsHidden() {
+    const moreInfoInfo = this._findShadowAncestor("ha-more-info-info");
+    if (moreInfoInfo?.shadowRoot) {
+      if (!this._hideStyle) {
+        this._hideStyle = document.createElement("style");
+        this._hideStyle.textContent = `
+          state-card-content,
+          ha-more-info-history,
+          ha-more-info-logbook {
+            display: none !important;
+          }
+        `;
+        moreInfoInfo.shadowRoot.append(this._hideStyle);
       }
+      return;
     }
+
+    this._hideAttempts += 1;
+    if (this._hideAttempts < 120) {
+      this._hideFrame = window.requestAnimationFrame(() =>
+        this._ensureDefaultSectionsHidden()
+      );
+    }
+  }
+
+  _findShadowAncestor(tagName) {
+    let node = this;
+    while (node) {
+      const root = node.getRootNode?.();
+      const host = root?.host;
+      if (!host) {
+        return undefined;
+      }
+      if (host.localName === tagName) {
+        return host;
+      }
+      node = host;
+    }
+    return undefined;
   }
 
   set hass(value) {
@@ -308,18 +341,10 @@ class Feel24MoreInfo extends HTMLElement {
   }
 
   _findNotificationEntity() {
-    const configEntryId = this._entry?.config_entry_id;
-    if (!configEntryId || !this._hass?.entities) {
-      return undefined;
-    }
-
-    return Object.entries(this._hass.entities).find(
-      ([entityId, entry]) =>
-        entityId.startsWith("switch.") &&
-        entry.platform === "feel24_visitors" &&
-        entry.config_entry_id === configEntryId &&
-        entry.unique_id?.endsWith("_varsel")
-    )?.[0];
+    const entityId = this._stateObj?.attributes?.notification_switch;
+    return typeof entityId === "string" && this._hass?.states?.[entityId]
+      ? entityId
+      : undefined;
   }
 
   async _toggleNotification(event) {
@@ -345,7 +370,9 @@ class Feel24MoreInfo extends HTMLElement {
   }
 
   _openNotificationConfig() {
-    const configEntryId = this._entry?.config_entry_id;
+    const configEntryId =
+      this._entry?.config_entry_id ??
+      this._stateObj?.attributes?.config_entry_id;
     if (!configEntryId) {
       return;
     }
