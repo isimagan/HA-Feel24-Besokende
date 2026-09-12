@@ -26,7 +26,7 @@ NOTIFICATION_TIME_MODE_WINDOW = "window"
 
 BASE_VISITORS_URL = "https://feel24tromso.ibooking.no/"
 ENTITY_PICTURE_URL = "/api/feel24_visitors/icon.png"
-FRONTEND_MODULE_URL = "/api/feel24_visitors/feel24-more-info.js?v=0.7.1"
+FRONTEND_MODULE_URL = "/api/feel24_visitors/feel24-more-info.js?v=0.7.2"
 FRONTEND_STATIC_URL = "/api/feel24_visitors/feel24-more-info.js"
 ICON = "mdi:shoe-sneaker"
 NOTIFICATION_ICON_OFF = "mdi:bell-off"
