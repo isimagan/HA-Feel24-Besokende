@@ -1,11 +1,6 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - "custom_components/feel24_visitors/manifest.json"
   workflow_dispatch:
 
 permissions:
