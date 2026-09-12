@@ -23,10 +23,6 @@ class Feel24MoreInfo extends HTMLElement {
           width: min(78%, 300px);
           padding: 14px 18px;
           border-radius: 14px;
-          background: rgb(0 0 0 / 6%);
-        }
-
-        :host([dark-mode]) .logo-surface {
           background: transparent;
         }
 
@@ -34,6 +30,11 @@ class Feel24MoreInfo extends HTMLElement {
           display: block;
           width: 100%;
           height: auto;
+          filter: brightness(0);
+        }
+
+        :host([dark-mode]) .logo {
+          filter: none;
         }
 
         .copy {
@@ -385,18 +386,10 @@ class Feel24MoreInfo extends HTMLElement {
       navigated = true;
       window.removeEventListener("dialog-closed", navigateToConfig);
 
-      const currentPath =
-        window.location.pathname + window.location.search + window.location.hash;
       const path =
         "/config/integrations/dashboard#config_entry=" +
         encodeURIComponent(configEntryId);
-
-      window.history.pushState({ from: currentPath }, "", path);
-      window.dispatchEvent(
-        new CustomEvent("location-changed", {
-          detail: { replace: false },
-        })
-      );
+      window.location.assign(path);
     };
 
     window.addEventListener("dialog-closed", navigateToConfig, { once: true });
