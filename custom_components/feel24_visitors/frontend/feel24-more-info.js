@@ -378,25 +378,74 @@ class Feel24MoreInfo extends HTMLElement {
       return;
     }
 
-    let navigated = false;
-    const navigateToConfig = () => {
-      if (navigated) {
+    let opened = false;
+    const openConfig = () => {
+      if (opened) {
         return;
       }
-      navigated = true;
-      window.removeEventListener("dialog-closed", navigateToConfig);
-
-      const path =
-        "/config/integrations/dashboard#config_entry=" +
-        encodeURIComponent(configEntryId);
-      window.location.assign(path);
+      opened = true;
+      window.removeEventListener("dialog-closed", openConfig);
+      this._openOptionsFlow(configEntryId);
     };
 
-    window.addEventListener("dialog-closed", navigateToConfig, { once: true });
+    window.addEventListener("dialog-closed", openConfig, { once: true });
     this.dispatchEvent(
       new CustomEvent("close-dialog", { bubbles: true, composed: true })
     );
-    window.setTimeout(navigateToConfig, 500);
+    window.setTimeout(openConfig, 500);
+  }
+
+  _openOptionsFlow(configEntryId) {
+    const path =
+      "/config/integrations/integration/feel24_visitors#config_entry=" +
+      encodeURIComponent(configEntryId);
+    window.history.pushState(
+      { from: window.location.pathname + window.location.search },
+      "",
+      path
+    );
+    window.dispatchEvent(
+      new CustomEvent("location-changed", { detail: { replace: false } })
+    );
+
+    let attempts = 0;
+    const openNativeOptions = () => {
+      const row = this._findConfigEntryRow(configEntryId);
+      if (typeof row?._showOptions === "function") {
+        row._showOptions();
+        return;
+      }
+
+      attempts += 1;
+      if (attempts < 300) {
+        window.requestAnimationFrame(openNativeOptions);
+      }
+    };
+    window.requestAnimationFrame(openNativeOptions);
+  }
+
+  _findConfigEntryRow(configEntryId, root = document) {
+    const elements = root.querySelectorAll?.("*") ?? [];
+    for (const element of elements) {
+      if (
+        element.localName === "ha-config-entry-row" &&
+        (element.dataset.entryId === configEntryId ||
+          element.data?.entry?.entry_id === configEntryId)
+      ) {
+        return element;
+      }
+
+      if (element.shadowRoot) {
+        const match = this._findConfigEntryRow(
+          configEntryId,
+          element.shadowRoot
+        );
+        if (match) {
+          return match;
+        }
+      }
+    }
+    return undefined;
   }
 
   _strong(value) {

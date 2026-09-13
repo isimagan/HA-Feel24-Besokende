@@ -49,8 +49,8 @@ Sensoren:
   `logo_path` (`/api/feel24_visitors/logo.png`)
 - oppdateres hvert femte minutt
 - har en egen **Mer info**-visning med Feel24-logo, besøkstall, sted,
-  oppdateringstid og en bryter for varsling; trykk på varslingsraden for å gå
-  til integrasjonens konfigurasjon
+  oppdateringstid og en bryter for varsling; trykk på varslingsraden for å åpne
+  konfigurasjonsveiviseren for besøksvarsel
 
 Hvert senter registreres også som en enhet i Home Assistant. Det gir senteret
 en egen enhetsside med sensoren, i stedet for bare en løs entitet i listen.
