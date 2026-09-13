@@ -378,21 +378,42 @@ class Feel24MoreInfo extends HTMLElement {
       return;
     }
 
+    let waitingForHistory = false;
     let opened = false;
-    const openConfig = () => {
+    let historyFallback;
+
+    const openAfterHistorySettles = () => {
       if (opened) {
         return;
       }
       opened = true;
-      window.removeEventListener("dialog-closed", openConfig);
-      this._openOptionsFlow(configEntryId);
+      window.clearTimeout(historyFallback);
+      window.removeEventListener("popstate", openAfterHistorySettles);
+
+      // Home Assistant removes the more-info dialog's history entry
+      // asynchronously. Let that navigation finish before opening a new dialog.
+      window.setTimeout(() => this._openOptionsFlow(configEntryId), 100);
     };
 
-    window.addEventListener("dialog-closed", openConfig, { once: true });
+    const waitForDialogHistory = () => {
+      if (waitingForHistory) {
+        return;
+      }
+      waitingForHistory = true;
+      window.removeEventListener("dialog-closed", waitForDialogHistory);
+      window.addEventListener("popstate", openAfterHistorySettles, {
+        once: true,
+      });
+      historyFallback = window.setTimeout(openAfterHistorySettles, 750);
+    };
+
+    window.addEventListener("dialog-closed", waitForDialogHistory, {
+      once: true,
+    });
     this.dispatchEvent(
       new CustomEvent("close-dialog", { bubbles: true, composed: true })
     );
-    window.setTimeout(openConfig, 500);
+    window.setTimeout(waitForDialogHistory, 500);
   }
 
   _openOptionsFlow(configEntryId) {
