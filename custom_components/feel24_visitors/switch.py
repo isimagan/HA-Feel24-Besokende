@@ -104,6 +104,11 @@ class Feel24VisitorNotificationSwitch(
         if self.coordinator.last_update_success:
             self._previous_count = numeric_visitor_count(self.coordinator.data)
 
+    @callback
+    def async_entity_id_changed(self, old_entity_id: str) -> None:
+        """Opt in to in-place entity ID changes."""
+        super().async_entity_id_changed(old_entity_id)
+
     @property
     def icon(self) -> str:
         """Return an icon matching the switch state."""
